@@ -13,6 +13,7 @@ export default function TextArea({ id, children }: TextAreaProps) {
       </label>
       <textarea
         id={id}
+        name={id}
         className="px-300 py-150 border-[1px] border-grey-500 hover:border-green-600 rounded-[8px] body-md text-grey-900"
       />
     </div>

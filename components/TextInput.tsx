@@ -31,6 +31,7 @@ export default function TextInput({
       <input
         className="border-[1px] border-grey-500 hover:border-green-600 rounded-[8px] px-300 py-150 body-md-regular text-grey-900"
         id={id}
+        name={id}
         onChange={(e) => handleChange(e.currentTarget.value)}
       />
     </div>

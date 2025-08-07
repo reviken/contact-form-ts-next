@@ -8,30 +8,18 @@ type CheckBoxInputChangeCallback = (checked: boolean) => void;
 
 interface CheckBoxInputProps {
   id: string;
-  onChange?: CheckBoxInputChangeCallback;
   children: ReactNode;
 }
 
 export default function CheckBoxInputProps({
   id,
-  onChange,
   children,
 }: CheckBoxInputProps) {
   const input = useRef<HTMLInputElement | null>(null);
 
-  function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    if (onChange) {
-      onChange(event.currentTarget.checked);
-    }
-  }
-
   function handleUncheck() {
     if (input.current) {
       input.current.checked = false;
-
-      if (onChange) {
-        onChange(false);
-      }
     }
   }
 
@@ -41,9 +29,9 @@ export default function CheckBoxInputProps({
         <input
           ref={input}
           id={id}
+          name={id}
           type="checkbox"
           className="appearance-none w-[18px] h-[18px] border-[1px] checked:border-0 border-grey-500 bg-white peer"
-          onChange={handleChange}
         />
         <Image
           src={checkBoxCheckIcon}

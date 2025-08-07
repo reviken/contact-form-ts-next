@@ -6,11 +6,38 @@ import RadioInputGroup from "@/components/RadioInputGroup";
 import SubmitButton from "@/components/SubmitButton";
 import TextArea from "@/components/TextArea";
 import TextInput from "@/components/TextInput";
+import { FormEvent } from "react";
+
+interface ContactFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  type: string;
+  message: string;
+  consent: boolean;
+}
 
 export default function DefaultPage() {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+
+    const contactFormData: ContactFormData = {
+      firstName: formData.get("firstName") as string,
+      lastName: formData.get("lastName") as string,
+      email: formData.get("email") as string,
+      type: formData.get("type") as string,
+      message: formData.get("message") as string,
+      consent: formData.get("consent") === "on",
+    };
+
+    console.log(contactFormData);
+  }
+
   return (
     <main className="w-[740px] p-500 rounded-[16px] bg-white">
-      <form className="flex flex-col gap-500">
+      <form className="flex flex-col gap-500" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-400">
           <h1 className="heading text-grey-900">Contact us</h1>
 
@@ -46,10 +73,7 @@ export default function DefaultPage() {
           <TextArea id="message">Message</TextArea>
         </div>
 
-        <CheckBoxInputProps
-          id="consent"
-          onChange={(checked) => console.log("Checked", checked)}
-        >
+        <CheckBoxInputProps id="consent">
           I consent to being contacted by the team
         </CheckBoxInputProps>
 
