@@ -2,12 +2,19 @@ import { ReactNode } from "react";
 
 interface TextAreaProps {
   id: string;
+  isInvalid: boolean;
+  validationMessage: string;
   children: ReactNode;
 }
 
-export default function TextArea({ id, children }: TextAreaProps) {
+export default function TextArea({
+  id,
+  isInvalid,
+  validationMessage,
+  children,
+}: TextAreaProps) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-200">
       <label htmlFor={id} className="body-sm text-grey-900">
         {children}
       </label>
@@ -16,6 +23,9 @@ export default function TextArea({ id, children }: TextAreaProps) {
         name={id}
         className="px-300 py-150 border-[1px] border-grey-500 hover:border-green-600 rounded-[8px] body-md text-grey-900"
       />
+      {isInvalid && (
+        <span className="body-sm text-red">{validationMessage}</span>
+      )}
     </div>
   );
 }

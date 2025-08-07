@@ -6,7 +6,7 @@ import RadioInputGroup from "@/components/RadioInputGroup";
 import SubmitButton from "@/components/SubmitButton";
 import TextArea from "@/components/TextArea";
 import TextInput from "@/components/TextInput";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 
 interface ContactFormData {
   firstName: string;
@@ -18,6 +18,25 @@ interface ContactFormData {
 }
 
 export default function DefaultPage() {
+  const [isFirstNameValid, setIsFirstNameValid] = useState<boolean | undefined>(
+    undefined,
+  );
+  const [isLastNameValid, setIsLastNameValid] = useState<boolean | undefined>(
+    undefined,
+  );
+  const [isEmailValid, setIsEmailValid] = useState<boolean | undefined>(
+    undefined,
+  );
+  const [isTypeValid, setIsTypeValid] = useState<boolean | undefined>(
+    undefined,
+  );
+  const [isMessageValid, setIsMessageValid] = useState<boolean | undefined>(
+    undefined,
+  );
+  const [isConsentValid, setIsConsentValid] = useState<boolean | undefined>(
+    undefined,
+  );
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -27,10 +46,25 @@ export default function DefaultPage() {
       firstName: formData.get("firstName") as string,
       lastName: formData.get("lastName") as string,
       email: formData.get("email") as string,
-      type: formData.get("type") as string,
+      type: (formData.get("type") as string) || "",
       message: formData.get("message") as string,
       consent: formData.get("consent") === "on",
     };
+
+    setIsFirstNameValid(contactFormData.firstName.trim().length > 0);
+    setIsLastNameValid(contactFormData.lastName.trim().length > 0);
+    setIsTypeValid(contactFormData.type !== "");
+    setIsMessageValid(contactFormData.message.trim().length > 0);
+    setIsConsentValid(contactFormData.consent === true);
+    setIsEmailValid(false);
+
+    if (contactFormData.email.trim().length > 0) {
+      if (contactFormData.email.includes("@")) {
+        if (contactFormData.email.includes(".")) {
+          setIsEmailValid(true);
+        }
+      }
+    }
 
     console.log(contactFormData);
   }
@@ -42,17 +76,37 @@ export default function DefaultPage() {
           <h1 className="heading text-grey-900">Contact us</h1>
 
           <div className="flex gap-200">
-            <TextInput id="firstName" className="flex-1/2">
+            <TextInput
+              id="firstName"
+              className="flex-1/2"
+              isInvalid={isFirstNameValid === false}
+              validationMessage="This field is required"
+            >
               First Name
             </TextInput>
-            <TextInput id="lastName" className="flex-1/2">
+            <TextInput
+              id="lastName"
+              className="flex-1/2"
+              isInvalid={isLastNameValid === false}
+              validationMessage="This field is required"
+            >
               Last Name
             </TextInput>
           </div>
 
-          <TextInput id="email">Email Address</TextInput>
+          <TextInput
+            id="email"
+            isInvalid={isEmailValid === false}
+            validationMessage="Please enter a valid email address"
+          >
+            Email Address
+          </TextInput>
 
-          <RadioInputGroup legend="Query Type">
+          <RadioInputGroup
+            legend="Query Type"
+            isInvalid={isTypeValid === false}
+            validationMessage="Please select a query type"
+          >
             <RadioInput
               id="general"
               name="type"
@@ -70,10 +124,20 @@ export default function DefaultPage() {
               Support Request
             </RadioInput>
           </RadioInputGroup>
-          <TextArea id="message">Message</TextArea>
+          <TextArea
+            id="message"
+            isInvalid={isMessageValid === false}
+            validationMessage="This field is required"
+          >
+            Message
+          </TextArea>
         </div>
 
-        <CheckBoxInputProps id="consent">
+        <CheckBoxInputProps
+          id="consent"
+          isInvalid={isConsentValid === false}
+          validationMessage="To submit this form, please consent to being contacted"
+        >
           I consent to being contacted by the team
         </CheckBoxInputProps>
 

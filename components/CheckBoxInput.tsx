@@ -6,11 +6,15 @@ import checkBoxCheckIcon from "@/assets/images/icon-checkbox-check.svg";
 
 interface CheckBoxInputProps {
   id: string;
+  isInvalid: boolean;
+  validationMessage: string;
   children: ReactNode;
 }
 
 export default function CheckBoxInputProps({
   id,
+  isInvalid,
+  validationMessage,
   children,
 }: CheckBoxInputProps) {
   const input = useRef<HTMLInputElement | null>(null);
@@ -22,27 +26,32 @@ export default function CheckBoxInputProps({
   }
 
   return (
-    <div className="flex items-center gap-200">
-      <div className="relative h-[18px]">
-        <input
-          ref={input}
-          id={id}
-          name={id}
-          type="checkbox"
-          className="appearance-none w-[18px] h-[18px] border-[1px] checked:border-0 border-grey-500 bg-white peer"
-        />
-        <Image
-          src={checkBoxCheckIcon}
-          alt={children ? children.toString() : ""}
-          width={18}
-          height={18}
-          className="absolute top-0 hidden peer-checked:block"
-          onClick={handleUncheck}
-        />
+    <div className="flex flex-col gap-200">
+      <div className="flex items-center gap-200">
+        <div className="relative h-[18px]">
+          <input
+            ref={input}
+            id={id}
+            name={id}
+            type="checkbox"
+            className="appearance-none w-[18px] h-[18px] border-[1px] checked:border-0 border-grey-500 bg-white peer"
+          />
+          <Image
+            src={checkBoxCheckIcon}
+            alt={children ? children.toString() : ""}
+            width={18}
+            height={18}
+            className="absolute top-0 hidden peer-checked:block"
+            onClick={handleUncheck}
+          />
+        </div>
+        <label htmlFor={id} className="body-sm text-grey-900">
+          {children}
+        </label>
       </div>
-      <label htmlFor={id} className="body-sm text-grey-900">
-        {children}
-      </label>
+      {isInvalid && (
+        <span className="body-sm text-red">{validationMessage}</span>
+      )}
     </div>
   );
 }
