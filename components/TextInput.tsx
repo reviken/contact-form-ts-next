@@ -30,6 +30,8 @@ export default function TextInput({
       ? "border-red"
       : "border-grey-500 hover:border-green-600";
 
+  const errorId = `${id}-error`;
+
   return (
     <div className={`flex flex-col gap-100 ${className}`}>
       <label className="body-sm text-grey-900" htmlFor={id}>
@@ -39,9 +41,16 @@ export default function TextInput({
         className={`border-[1px] ${borderStyle} rounded-[8px] px-300 py-150 body-md-regular text-grey-900`}
         id={id}
         name={id}
+        type="text"
         onChange={(e) => handleChange(e.currentTarget.value)}
+        aria-invalid={error !== undefined}
+        aria-describedby={error ? errorId : undefined}
       />
-      {error !== undefined && <span className="body-sm text-red">{error}</span>}
+      {error !== undefined && (
+        <span id={errorId} className="body-sm text-red">
+          {error}
+        </span>
+      )}
     </div>
   );
 }

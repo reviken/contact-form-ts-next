@@ -27,6 +27,8 @@ export default function CheckBoxInput({
     }
   }
 
+  const errorId = `${id}-error`;
+
   return (
     <div className="flex flex-col gap-200">
       <div className="flex items-center gap-200">
@@ -42,6 +44,8 @@ export default function CheckBoxInput({
                 onChange(e.currentTarget.checked);
               }
             }}
+            aria-invalid={error !== undefined}
+            aria-describedby={errorId}
           />
           <Image
             src={checkBoxCheckIcon}
@@ -56,7 +60,11 @@ export default function CheckBoxInput({
           {children}
         </label>
       </div>
-      {error !== undefined && <span className="body-sm text-red">{error}</span>}
+      {error !== undefined && (
+        <span id={errorId} className="body-sm text-red">
+          {error}
+        </span>
+      )}
     </div>
   );
 }

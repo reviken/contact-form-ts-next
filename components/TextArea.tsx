@@ -15,6 +15,8 @@ export default function TextArea({
   onChange,
   children,
 }: TextAreaProps) {
+  const errorId = `${id}-error`;
+
   return (
     <div className="flex flex-col gap-200">
       <label htmlFor={id} className="body-sm text-grey-900">
@@ -29,8 +31,14 @@ export default function TextArea({
             onChange(e.currentTarget.value);
           }
         }}
+        aria-invalid={error !== undefined}
+        aria-describedby={error ? errorId : undefined}
       />
-      {error !== undefined && <span className="body-sm text-red">{error}</span>}
+      {error !== undefined && (
+        <span id={errorId} className="body-sm text-red">
+          {error}
+        </span>
+      )}
     </div>
   );
 }
