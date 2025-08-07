@@ -53,7 +53,11 @@ export default function DefaultPage() {
             Email Address
           </TextInput>
 
-          <RadioInputGroup legend="Query Type" error={formErrors.type}>
+          <RadioInputGroup
+            id="type-group"
+            legend="Query Type"
+            error={formErrors.type}
+          >
             <RadioInput
               id="general"
               name="type"
