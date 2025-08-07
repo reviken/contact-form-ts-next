@@ -1,10 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { ChangeEvent, ReactNode, useRef } from "react";
+import { ReactNode, useRef } from "react";
 import checkBoxCheckIcon from "@/assets/images/icon-checkbox-check.svg";
-
-type CheckBoxInputChangeCallback = (checked: boolean) => void;
 
 interface CheckBoxInputProps {
   id: string;
