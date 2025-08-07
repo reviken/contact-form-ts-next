@@ -30,5 +30,5 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [git@github.com:reviken/contact-form-ts-next.git](git@github.com:reviken/contact-form-ts-next.git)
+- Solution URL: [https://github.com/reviken/contact-form-ts-next](https://github.com/reviken/contact-form-ts-next)
 - Live Site URL: [https://contact-form-ts-next-dbps4nrn3.vercel.app](https://contact-form-ts-next-dbps4nrn3.vercel.app)
