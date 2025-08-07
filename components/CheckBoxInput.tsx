@@ -4,17 +4,19 @@ import Image from "next/image";
 import { ReactNode, useRef } from "react";
 import checkBoxCheckIcon from "@/assets/images/icon-checkbox-check.svg";
 
+export type CheckBoxChangeCallback = (value: boolean) => void;
+
 interface CheckBoxInputProps {
   id: string;
-  isInvalid: boolean;
-  validationMessage: string;
+  error?: string;
+  onChange?: CheckBoxChangeCallback;
   children: ReactNode;
 }
 
-export default function CheckBoxInputProps({
+export default function CheckBoxInput({
   id,
-  isInvalid,
-  validationMessage,
+  error,
+  onChange,
   children,
 }: CheckBoxInputProps) {
   const input = useRef<HTMLInputElement | null>(null);
@@ -35,6 +37,11 @@ export default function CheckBoxInputProps({
             name={id}
             type="checkbox"
             className="appearance-none w-[18px] h-[18px] border-[1px] checked:border-0 border-grey-500 bg-white peer"
+            onChange={(e) => {
+              if (onChange) {
+                onChange(e.currentTarget.checked);
+              }
+            }}
           />
           <Image
             src={checkBoxCheckIcon}
@@ -49,9 +56,7 @@ export default function CheckBoxInputProps({
           {children}
         </label>
       </div>
-      {isInvalid && (
-        <span className="body-sm text-red">{validationMessage}</span>
-      )}
+      {error !== undefined && <span className="body-sm text-red">{error}</span>}
     </div>
   );
 }

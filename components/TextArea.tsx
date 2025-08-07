@@ -1,16 +1,18 @@
 import { ReactNode } from "react";
 
+export type TextAreaChangeCallback = (value: string) => void;
+
 interface TextAreaProps {
   id: string;
-  isInvalid: boolean;
-  validationMessage: string;
+  error?: string;
+  onChange?: TextAreaChangeCallback;
   children: ReactNode;
 }
 
 export default function TextArea({
   id,
-  isInvalid,
-  validationMessage,
+  error,
+  onChange,
   children,
 }: TextAreaProps) {
   return (
@@ -22,10 +24,13 @@ export default function TextArea({
         id={id}
         name={id}
         className="px-300 py-150 border-[1px] border-grey-500 hover:border-green-600 rounded-[8px] body-md text-grey-900"
+        onChange={(e) => {
+          if (onChange) {
+            onChange(e.currentTarget.value);
+          }
+        }}
       />
-      {isInvalid && (
-        <span className="body-sm text-red">{validationMessage}</span>
-      )}
+      {error !== undefined && <span className="body-sm text-red">{error}</span>}
     </div>
   );
 }

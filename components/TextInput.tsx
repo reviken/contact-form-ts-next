@@ -6,8 +6,7 @@ type TextInputPropsChangeCallback = (value: string) => void;
 
 interface TextInputProps {
   id: string;
-  isInvalid: boolean;
-  validationMessage: string;
+  error?: string;
   onChange?: TextInputPropsChangeCallback;
   className?: string;
   children: ReactNode;
@@ -15,8 +14,7 @@ interface TextInputProps {
 
 export default function TextInput({
   id,
-  isInvalid,
-  validationMessage,
+  error,
   onChange,
   className,
   children,
@@ -27,9 +25,10 @@ export default function TextInput({
     }
   }
 
-  const borderStyle = isInvalid
-    ? "border-red"
-    : "border-grey-500 hover:border-green-600";
+  const borderStyle =
+    error !== undefined
+      ? "border-red"
+      : "border-grey-500 hover:border-green-600";
 
   return (
     <div className={`flex flex-col gap-100 ${className}`}>
@@ -42,9 +41,7 @@ export default function TextInput({
         name={id}
         onChange={(e) => handleChange(e.currentTarget.value)}
       />
-      {isInvalid && (
-        <span className="body-sm text-red">{validationMessage}</span>
-      )}
+      {error !== undefined && <span className="body-sm text-red">{error}</span>}
     </div>
   );
 }

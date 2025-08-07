@@ -2,15 +2,13 @@ import { ReactNode } from "react";
 
 interface RadioInputGroupProps {
   legend: string;
-  isInvalid: boolean;
-  validationMessage: string;
+  error?: string;
   children: ReactNode;
 }
 
 export default function RadioInputGroup({
   legend,
-  isInvalid,
-  validationMessage,
+  error,
   children,
 }: RadioInputGroupProps) {
   return (
@@ -19,9 +17,7 @@ export default function RadioInputGroup({
         <legend className="body-sm text-grey-900">{legend}</legend>
       </span>
       <div className="flex gap-200">{children}</div>
-      {isInvalid && (
-        <span className="body-sm text-red">{validationMessage}</span>
-      )}
+      {error !== undefined && <span className="body-sm text-red">{error}</span>}
     </fieldset>
   );
 }

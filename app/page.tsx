@@ -1,72 +1,23 @@
 "use client";
 
-import CheckBoxInputProps from "@/components/CheckBoxInput";
+import CheckBoxInput from "@/components/CheckBoxInput";
 import RadioInput from "@/components/RadioInput";
 import RadioInputGroup from "@/components/RadioInputGroup";
 import SubmitButton from "@/components/SubmitButton";
 import TextArea from "@/components/TextArea";
 import TextInput from "@/components/TextInput";
-import { FormEvent, useState } from "react";
-
-interface ContactFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  type: string;
-  message: string;
-  consent: boolean;
-}
+import { useContactForm } from "@/hooks/useContactForm";
+import { FormEvent } from "react";
 
 export default function DefaultPage() {
-  const [isFirstNameValid, setIsFirstNameValid] = useState<boolean | undefined>(
-    undefined,
-  );
-  const [isLastNameValid, setIsLastNameValid] = useState<boolean | undefined>(
-    undefined,
-  );
-  const [isEmailValid, setIsEmailValid] = useState<boolean | undefined>(
-    undefined,
-  );
-  const [isTypeValid, setIsTypeValid] = useState<boolean | undefined>(
-    undefined,
-  );
-  const [isMessageValid, setIsMessageValid] = useState<boolean | undefined>(
-    undefined,
-  );
-  const [isConsentValid, setIsConsentValid] = useState<boolean | undefined>(
-    undefined,
-  );
+  const { formData, formErrors, validateForm, updateForm } = useContactForm();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    const isValid = validateForm();
 
-    const contactFormData: ContactFormData = {
-      firstName: formData.get("firstName") as string,
-      lastName: formData.get("lastName") as string,
-      email: formData.get("email") as string,
-      type: (formData.get("type") as string) || "",
-      message: formData.get("message") as string,
-      consent: formData.get("consent") === "on",
-    };
-
-    setIsFirstNameValid(contactFormData.firstName.trim().length > 0);
-    setIsLastNameValid(contactFormData.lastName.trim().length > 0);
-    setIsTypeValid(contactFormData.type !== "");
-    setIsMessageValid(contactFormData.message.trim().length > 0);
-    setIsConsentValid(contactFormData.consent === true);
-    setIsEmailValid(false);
-
-    if (contactFormData.email.trim().length > 0) {
-      if (contactFormData.email.includes("@")) {
-        if (contactFormData.email.includes(".")) {
-          setIsEmailValid(true);
-        }
-      }
-    }
-
-    console.log(contactFormData);
+    console.log(isValid, formData);
   }
 
   return (
@@ -79,16 +30,16 @@ export default function DefaultPage() {
             <TextInput
               id="firstName"
               className="flex-1/2"
-              isInvalid={isFirstNameValid === false}
-              validationMessage="This field is required"
+              error={formErrors.firstName}
+              onChange={(x) => updateForm("firstName", x)}
             >
               First Name
             </TextInput>
             <TextInput
               id="lastName"
               className="flex-1/2"
-              isInvalid={isLastNameValid === false}
-              validationMessage="This field is required"
+              error={formErrors.lastName}
+              onChange={(x) => updateForm("lastName", x)}
             >
               Last Name
             </TextInput>
@@ -96,22 +47,19 @@ export default function DefaultPage() {
 
           <TextInput
             id="email"
-            isInvalid={isEmailValid === false}
-            validationMessage="Please enter a valid email address"
+            error={formErrors.email}
+            onChange={(x) => updateForm("email", x)}
           >
             Email Address
           </TextInput>
 
-          <RadioInputGroup
-            legend="Query Type"
-            isInvalid={isTypeValid === false}
-            validationMessage="Please select a query type"
-          >
+          <RadioInputGroup legend="Query Type" error={formErrors.type}>
             <RadioInput
               id="general"
               name="type"
               value="general"
               className="flex-1/2"
+              onSelect={() => updateForm("type", "general")}
             >
               General Enquiry
             </RadioInput>
@@ -120,26 +68,27 @@ export default function DefaultPage() {
               name="type"
               value="support"
               className="flex-1/2"
+              onSelect={() => updateForm("type", "support")}
             >
               Support Request
             </RadioInput>
           </RadioInputGroup>
           <TextArea
             id="message"
-            isInvalid={isMessageValid === false}
-            validationMessage="This field is required"
+            error={formErrors.message}
+            onChange={(x) => updateForm("message", x)}
           >
             Message
           </TextArea>
         </div>
 
-        <CheckBoxInputProps
+        <CheckBoxInput
           id="consent"
-          isInvalid={isConsentValid === false}
-          validationMessage="To submit this form, please consent to being contacted"
+          error={formErrors.consent}
+          onChange={(x) => updateForm("consent", x)}
         >
           I consent to being contacted by the team
-        </CheckBoxInputProps>
+        </CheckBoxInput>
 
         <SubmitButton>Submit</SubmitButton>
       </form>
